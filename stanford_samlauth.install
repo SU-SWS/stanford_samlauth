@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Stanford SAML Authentication
+ *   module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_samlauth_install() {
+  $modules = \Drupal::moduleHandler();
+  $module_installer = \Drupal::service('module_installer');
+  if ($modules->moduleExists('simplesamlphp_auth')) {
+    if ($modules->moduleExists('stanford_ssp')) {
+      $module_installer->uninstall(['stanford_ssp']);
+    }
+    $module_installer->uninstall(['simplesamlphp_auth']);
+  }
+
+  $r4032login = \Drupal::configFactory()
+    ->getEditable('r4032login.settings');
+  $r4032login->set('add_noindex_header', TRUE)
+    ->set('match_noredirect_pages', "/jsonapi\r\n/jsonapi/*\r\n/subrequests")
+    ->save();
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function stanford_samlauth_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $value = mt_rand(0, 100);
+    $requirements['stanford_samlauth_status'] = [
+      'title' => t('Stanford SAML Authentication status'),
+      'value' => t('Stanford SAML Authentication value: @value', ['@value' => $value]),
+      'severity' => $value > 50 ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
+    ];
+  }
+
+  return $requirements;
+}
