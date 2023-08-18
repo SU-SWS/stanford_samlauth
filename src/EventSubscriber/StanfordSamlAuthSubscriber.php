@@ -71,7 +71,7 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
     $account = $event->getAccount();
     $account->set('affiliation', $event->getAttributes()['eduPersonAffiliation']);
 
-    if (!$this->userIsAllowed($account)) {
+    if (!$this->userIsAllowed($account, $event->getAttributes())) {
       throw new UserVisibleException('Unauthorized login attempt');
     }
     if ($this->assignRoleMapping($account, $event->getAttributes())) {
@@ -137,7 +137,7 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
    * @return bool
    *   If the user is allowed.
    */
-  protected function userIsAllowed(UserInterface $account): bool {
+  protected function userIsAllowed(UserInterface $account, array $attributes): bool {
     // All users are allowed.
     if (!$this->stanfordConfig->get('allowed.restrict')) {
       return TRUE;
@@ -157,9 +157,18 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
       }
     }
 
+    $allowed_groups = $this->stanfordConfig->get('allowed.groups') ?: [];
+
+    // The `eduPersonEntitlement` contains the workgroup data, but it isn't,
+    // always available. It depends on the individual SP and the workgroup
+    // release policy.
+    $entitlements = $attributes['eduPersonEntitlement'] ?? [];
+    if (array_intersect($allowed_groups, $entitlements)) {
+      return TRUE;
+    }
+
     // Use the workgroup API to check if the user exists in any of the allowed
     // workgroups.
-    $allowed_groups = $this->stanfordConfig->get('allowed.groups') ?: [];
     return $this->workgroupApi->userInAnyGroup($allowed_groups, $account->getAccountName());
   }
 

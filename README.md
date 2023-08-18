@@ -8,6 +8,20 @@ Description
 
 This is an enhancement module for [SamlAuth module](https://www.drupal.org/project/samlauth).
 
+Installation
+---
+
+Place the Saml cert and key on the server in a protected location. They should be kept secret.
+Add the following to the settings.php file indicating the path to the cert files:
+```php
+$settings['samlauth.authentication']['sp_x509_certificate'] = '/path/to/cert.crt';
+$settings['samlauth.authentication']['sp_private_key'] = '/path/to/cert.key';
+$settings['samlauth.authentication']['idp_certs'][0] = '/path/to/signing/cert.crt';
+
+// Optional Workgroup API cert and key.
+$settings['stanford_samlauth.settings']['role_mapping']['workgroup_api']['cert'] = '/path/to/workgroup/cert.crt';
+$settings['stanford_samlauth.settings']['role_mapping']['workgroup_api']['key'] = '/path/to/workgroup/cert.key';
+```
 
 Configuration
 ---

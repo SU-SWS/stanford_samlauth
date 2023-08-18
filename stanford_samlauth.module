@@ -46,6 +46,7 @@ function stanford_samlauth_menu_local_tasks_alter(&$data, $route_name, Refinable
 function stanford_samlauth_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $link_text = \Drupal::config('samlauth.authentication')
     ->get('login_menu_item_title');
+  $form['#attached']['library'][] = 'stanford_samlauth/samlauth';
   $form['saml'] = [
     '#type' => 'html_tag',
     '#weight' => -99,
@@ -55,6 +56,7 @@ function stanford_samlauth_form_user_login_form_alter(&$form, FormStateInterface
       'rel' => 'nofollow',
       'href' => '/saml/login',
       'class' => [
+        'samlauth-login',
         'su-button',
         'decanter-button',
       ],

@@ -35,3 +35,11 @@ stanford_samlauth.role_mapping:
     _form: 'Drupal\stanford_samlauth\Form\RoleMappingSettingsForm'
   requirements:
     _permission: 'configure saml'
+
+stanford_samlauth.create_user:
+  path: '/admin/people/create/saml'
+  defaults:
+    _title: 'Add SAML User'
+    _form: 'Drupal\stanford_samlauth\Form\SamlAuthCreateUserForm'
+  requirements:
+    _permission: 'administer users'
