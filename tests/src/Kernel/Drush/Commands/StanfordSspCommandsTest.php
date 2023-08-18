@@ -1,10 +1,9 @@
 <?php
 
-namespace Drupal\Tests\stanford_samlauth\Kernel\Commands;
+namespace Drupal\Tests\stanford_samlauth\Kernel\Drush\Commands;
 
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
-use Drupal\user\Entity\Role;
+use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -13,20 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package Drupal\Tests\stanford_samlauth\Kernel\Commands
  * @coversDefaultClass \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands
  */
-class StanfordSspCommandsTest extends KernelTestBase {
+class StanfordSspCommandsTest extends StanfordSamlAuthTestBase {
 
-  /**
-   * {@inheritDoc}
-   */
-  protected static $modules = [
-    'system',
-    'stanford_samlauth',
-    'samlauth',
-    'externalauth',
-    'user',
-    'stanford_samlauth_test',
-    'path_alias',
-  ];
 
   /**
    * Drush command service.
@@ -40,16 +27,6 @@ class StanfordSspCommandsTest extends KernelTestBase {
    */
   protected function setUp(): void {
     parent::setup();
-
-    $this->installEntitySchema('user');
-    $this->installEntitySchema('user_role');
-    $this->installSchema('externalauth', 'authmap');
-    $this->installSchema('system', ['key_value_expire', 'sequences']);
-    $this->installConfig(['stanford_samlauth']);
-
-    for ($i = 0; $i < 5; $i++) {
-      Role::create(['label' => "Role $i", 'id' => "role$i"])->save();
-    }
 
     $authmap = \Drupal::service('externalauth.authmap');
     $form_builder = \Drupal::formBuilder();

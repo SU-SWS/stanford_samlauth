@@ -44,7 +44,7 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       SamlauthEvents::USER_SYNC => 'onSamlUserSync',
-      KernelEvents::REQUEST => ['onKernelRequest'],
+      KernelEvents::REQUEST => 'onKernelRequest',
     ];
   }
 
@@ -69,7 +69,7 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
 
   public function onSamlUserSync(SamlauthUserSyncEvent $event) {
     $account = $event->getAccount();
-    $account->set('affiliation', $event->getAttributes()['eduPersonAffiliation']);
+    $account->set('affiliation', $event->getAttributes()['eduPersonAffiliation'] ?? []);
 
     if (!$this->userIsAllowed($account, $event->getAttributes())) {
       throw new UserVisibleException('Unauthorized login attempt');
@@ -99,7 +99,8 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
       'faculty' => 'stanford_faculty',
       'student' => 'stanford_student',
     ];
-    foreach (array_intersect($attributes['eduPersonAffiliation'], array_keys($affiliations)) as $key) {
+    $user_affiliations = $attributes['eduPersonAffiliation'] ?? [];
+    foreach (array_intersect($user_affiliations, array_keys($affiliations)) as $key) {
       $account->addRole($affiliations[$key]);
       $changed_account = TRUE;
     }
@@ -163,6 +164,7 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
     // always available. It depends on the individual SP and the workgroup
     // release policy.
     $entitlements = $attributes['eduPersonEntitlement'] ?? [];
+
     if (array_intersect($allowed_groups, $entitlements)) {
       return TRUE;
     }
