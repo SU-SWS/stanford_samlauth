@@ -79,9 +79,12 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
     $account = $event->getAccount();
     $account->set('affiliation', $event->getAttributes()['eduPersonAffiliation'] ?? []);
 
+    // Make sure the user is authorized first.
     if (!$this->userIsAllowed($account, $event->getAttributes())) {
       throw new UserVisibleException('Unauthorized login attempt');
     }
+
+    // Do the role mapping.
     if ($this->assignRoleMapping($account, $event->getAttributes())) {
       $event->markAccountChanged();
     }
@@ -101,9 +104,11 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
   protected function assignRoleMapping(UserInterface $account, array $attributes): bool {
     $changed_account = FALSE;
     $evaluate = $this->stanfordConfig->get('role_mapping.reevaluate');
+    // Don't do any role mapping.
     if ($evaluate == 'none') {
       return FALSE;
     }
+
     if ($evaluate == 'all') {
       // If configured to re-evaluate all roles, simply first remove them all.
       // We will add them back in the later steps.
@@ -113,6 +118,7 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
       }
     }
 
+    // Add affiliation roles first.
     $affiliations = [
       'staff' => 'stanford_staff',
       'faculty' => 'stanford_faculty',

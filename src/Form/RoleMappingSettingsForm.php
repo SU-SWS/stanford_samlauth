@@ -71,6 +71,13 @@ class RoleMappingSettingsForm extends ConfigFormBase {
       '#default_value' => $settings->get('role_mapping.reevaluate') ?? 'new',
     ];
 
+    $form['user_info'] = [
+      '#type' => 'container',
+      '#states' => [
+        'invisible' => ['input[name="reevaluate"]' => ['value' => 'none']],
+      ],
+    ];
+
     $form['user_info']['role_mapping'] = [
       '#type' => 'table',
       '#tree' => TRUE,
@@ -265,7 +272,13 @@ class RoleMappingSettingsForm extends ConfigFormBase {
    */
   protected function buildWorkgroupApiForm(array &$form, FormStateInterface $form_state) {
     $stanford_config = $this->config('stanford_samlauth.settings');
-    $form['use_workgroup_api'] = [
+    $form['workgroup_api'] = [
+      '#type' => 'container',
+      '#states' => [
+        'invisible' => ['input[name="reevaluate"]' => ['value' => 'none']],
+      ],
+    ];
+    $form['workgroup_api']['use_workgroup_api'] = [
       '#type' => 'radios',
       '#title' => $this->t('Source to validate role mapping groups against.'),
       '#default_value' => $stanford_config->get('role_mapping.workgroup_api.cert') ? 1 : 0,
@@ -281,7 +294,7 @@ class RoleMappingSettingsForm extends ConfigFormBase {
       ],
     ];
 
-    $form['workgroup_api_cert'] = [
+    $form['workgroup_api']['workgroup_api_cert'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Path to Workgroup API SSL Certificate.'),
       '#description' => $this->t('For more information on how to get a certificate please see: https://uit.stanford.edu/service/registry/certificates.'),
@@ -289,7 +302,7 @@ class RoleMappingSettingsForm extends ConfigFormBase {
       '#states' => $states,
     ];
 
-    $form['workgroup_api_key'] = [
+    $form['workgroup_api']['workgroup_api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Key to Workgroup API SSL Key.'),
       '#description' => $this->t('For more information on how to get a key please see: https://uit.stanford.edu/service/registry/certificates.'),

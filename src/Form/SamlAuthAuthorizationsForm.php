@@ -73,6 +73,7 @@ class SamlAuthAuthorizationsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    // If not restricting, clear the input field values.
     if (!$form_state->getValue('restrict')) {
       $form_state->setValue('users', '')
         ->setValue('affiliations', [])

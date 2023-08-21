@@ -97,11 +97,13 @@ class SamlAuthCreateUserForm extends FormBase {
    */
   public static function validateSunetId(array &$element, FormStateInterface $form_state, array &$complete_form) {
     $value = $element['#value'];
+    // Lowercase alphanumeric only.
     if (!preg_match('/^[a-z0-9]*$/', $value)) {
       $form_state->setError($element, t('Invalid SunetID'));
       return;
     }
 
+    // Use the workgroup api to check for valid sunet.
     /** @var \Drupal\stanford_ssp\Service\StanfordSSPWorkgroupApiInterface $workgroup_api */
     $workgroup_api = \Drupal::service('stanford_samlauth.workgroup_api');
     if ($workgroup_api->connectionSuccessful() && !$workgroup_api->isSunetValid($value)) {
@@ -115,7 +117,7 @@ class SamlAuthCreateUserForm extends FormBase {
    * @return array
    *   Keyed array of role id and role label.
    */
-  protected static function getAvailableRoles() {
+  protected static function getAvailableRoles(): array {
     if (\Drupal::moduleHandler()->moduleExists('role_delegation')) {
       /** @var \Drupal\role_delegation\DelegatableRolesInterface $role_delegation */
       $role_delegation = \Drupal::service('delegatable_roles');
@@ -129,6 +131,7 @@ class SamlAuthCreateUserForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
+
     $sunet = strtolower(trim(Html::escape(($form_state->getValue('sunetid')))));
     $form_state->setValue('sunetid', $sunet);
 

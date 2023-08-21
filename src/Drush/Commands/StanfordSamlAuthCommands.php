@@ -74,18 +74,20 @@ class StanfordSamlAuthCommands extends DrushCommands {
   public function entitlementRole(string $entitlement, string $role_id) {
     $role_id = Html::escape($role_id);
     $existing_roles = user_roles(TRUE);
+
+    // Validate the role exists.
     if (!isset($existing_roles[$role_id])) {
       $this->logger->error(dt('No role exists with the ID "%role_id".', ['%role_id' => $role_id]));
       return;
     }
 
+    // Add the mapping to the existing config.
     $role_mappings = $this->stanfordConfig->get('role_mapping.mapping') ?: [];
     $role_mappings[] = [
       'role' => $role_id,
       'attribute' => 'eduPersonEntitlement',
       'value' => $entitlement,
     ];
-
     $this->stanfordConfig->set('role_mapping.mapping', $role_mappings)->save();
 
     $message = dt('Mapped the "@entitlement" entitlement to the "@role" role.', [
@@ -129,6 +131,7 @@ class StanfordSamlAuthCommands extends DrushCommands {
       }
     }
 
+    // Build the roles array and make sure to only add the ones that exist.
     $options['roles'] = array_filter(explode(',', $options['roles'] ?: ''));
     $existing_roles = array_keys(user_roles(TRUE));
     $options['roles'] = array_intersect($existing_roles, $options['roles']);
@@ -139,6 +142,7 @@ class StanfordSamlAuthCommands extends DrushCommands {
       $options['roles'] = [];
     }
 
+    // Use the form to provide validation and such.
     $form_state = new FormState();
     $form_state->setValues($options);
     $this->formBuilder->submitForm(SamlAuthCreateUserForm::class, $form_state);
