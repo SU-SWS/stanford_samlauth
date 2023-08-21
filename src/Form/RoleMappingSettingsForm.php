@@ -120,14 +120,14 @@ class RoleMappingSettingsForm extends ConfigFormBase {
     $role_mapping[] = $added_mapping;
 
     $set_mappings = [];
-    foreach ($role_mapping as $key => $mapping) {
+    foreach ($role_mapping as $mapping) {
       if (!$mapping['attribute']) {
         $mapping['attribute'] = 'eduPersonEntitlement';
       }
       if (!$mapping['value']) {
         continue;
       }
-      // use the md5 to remove any duplicate mapping values.
+      // Use the md5 to remove any duplicate mapping values.
       $set_mappings[md5(json_encode($mapping))] = $mapping;
     }
 
@@ -144,7 +144,7 @@ class RoleMappingSettingsForm extends ConfigFormBase {
    * Add/remove a new workgroup mapping callback.
    *
    * @param array $form
-   *   Compolete Form.
+   *   Complete Form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Current form state.
    *
@@ -217,7 +217,6 @@ class RoleMappingSettingsForm extends ConfigFormBase {
   /**
    * Build the table row for the role mapping string.
    *
-   *
    * @return array
    *   Table render array.
    *
@@ -263,9 +262,9 @@ class RoleMappingSettingsForm extends ConfigFormBase {
     $form['use_workgroup_api'] = [
       '#type' => 'radios',
       '#title' => $this->t('Source to validate role mapping groups against.'),
-      '#default_value' => $stanford_config->get('role_mapping.workgroup_api.cert') ? 1: 0,
+      '#default_value' => $stanford_config->get('role_mapping.workgroup_api.cert') ? 1 : 0,
       '#options' => [
-       $this->t('SAML Attribute'),
+        $this->t('SAML Attribute'),
         $this->t('Workgroup API'),
       ],
     ];

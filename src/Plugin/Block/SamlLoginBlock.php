@@ -46,14 +46,14 @@ class SamlLoginBlock extends BlockBase implements ContainerFactoryPluginInterfac
    *
    * @param array $configuration
    *   Configuration settings.
-   * @param $plugin_id
+   * @param string $plugin_id
    *   Block machine name.
-   * @param $plugin_definition
+   * @param array $plugin_definition
    *   Plugin definition.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   Current request stack object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $requestStack) {
+  public function __construct(array $configuration, string $plugin_id, array $plugin_definition, RequestStack $requestStack) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUri = $requestStack->getCurrentRequest()?->getRequestUri();
   }

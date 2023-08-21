@@ -67,6 +67,12 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
     $this->stanfordConfig = $config_factory->get('stanford_samlauth.settings');
   }
 
+  /**
+   * Check for authorization and do role mapping when a user is logging in.
+   *
+   * @param \Drupal\samlauth\Event\SamlauthUserSyncEvent $event
+   *   Saml auth event after external auth event.
+   */
   public function onSamlUserSync(SamlauthUserSyncEvent $event) {
     $account = $event->getAccount();
     $account->set('affiliation', $event->getAttributes()['eduPersonAffiliation'] ?? []);
@@ -79,6 +85,17 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
     }
   }
 
+  /**
+   * Assign appropriate roles based on configured role mapping values.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   User account.
+   * @param array $attributes
+   *   SAML attributes.
+   *
+   * @return bool
+   *   If the account was modified at all.
+   */
   protected function assignRoleMapping(UserInterface $account, array $attributes): bool {
     $changed_account = FALSE;
     $evaluate = $this->stanfordConfig->get('role_mapping.reevaluate');
@@ -118,9 +135,15 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
       return $changed_account;
     }
 
-    // Compare the
+    // Compare the saml attribute values to the accepted values.
     foreach ($this->stanfordConfig->get('role_mapping.mapping') as $role_mapping) {
-      if (NestedArray::getValue($attributes, explode('|', $role_mapping['attribute'])) == $role_mapping['value']) {
+      $saml_value = NestedArray::getValue($attributes, explode('|', $role_mapping['attribute']));
+      // Either the value matches exactly, or the expected value is in the saml
+      // data attribute array.
+      if (
+        $saml_value == $role_mapping['value'] ||
+        (is_array($saml_value) && in_array($role_mapping['value'], $saml_value))
+      ) {
         $account->addRole($role_mapping['role']);
         $changed_account = TRUE;
       }
@@ -134,6 +157,8 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\user\UserInterface $account
    *   Saml User account.
+   * @param array $attributes
+   *   Saml attributes.
    *
    * @return bool
    *   If the user is allowed.
@@ -176,6 +201,9 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
 
   /**
    * Redirect user create page if local login is disabled.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   *   Triggered kernel event.
    */
   public function onKernelRequest(RequestEvent $event) {
     $request = $event->getRequest();

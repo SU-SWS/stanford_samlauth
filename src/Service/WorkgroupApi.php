@@ -77,7 +77,6 @@ class WorkgroupApi implements WorkgroupApiInterface {
     }
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -145,7 +144,7 @@ class WorkgroupApi implements WorkgroupApiInterface {
    * {@inheritDoc}
    */
   public function isSunetValid(string $sunet): bool {
-    return !!$this->callApi(null, $sunet);
+    return !!$this->callApi(NULL, $sunet);
   }
 
   /**
@@ -156,7 +155,7 @@ class WorkgroupApi implements WorkgroupApiInterface {
    * @param string|null $sunet
    *   User sunetid.
    *
-   * @return bool|array
+   * @return null|array
    *   API response or false if fails.
    */
   protected function callApi(string $workgroup = NULL, string $sunet = NULL): ?array {

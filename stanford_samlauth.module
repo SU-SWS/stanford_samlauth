@@ -16,10 +16,10 @@ use Drupal\Core\Field\BaseFieldDefinition;
  */
 function stanford_samlauth_entity_base_field_info(EntityTypeInterface $entity_type) {
   $fields = [];
-  if($entity_type->id() == 'user'){
+  if ($entity_type->id() == 'user') {
     $fields['affiliation'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Affiliation'))
-      ->setDescription(t('User\'s affiliation as defined by SAML data.'))
+      ->setDescription(t("User's affiliation as defined by SAML data."))
       ->setStorageRequired(TRUE)
       ->setCardinality(-1);
   }
