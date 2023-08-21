@@ -38,6 +38,7 @@ class SamlLoginBlockTest extends UnitTestCase {
     $request_stack = new RequestStack();
 
     $context_manager = $this->createMock(CacheContextsManager::class);
+    $context_manager->method('assertValidTokens')->willReturn(TRUE);
 
     $container = new ContainerBuilder();
     $container->set('string_translation', $this->getStringTranslationStub());
