@@ -51,6 +51,8 @@ class StanfordSamlAuthSubscriber implements EventSubscriberInterface {
   /**
    * StanfordSSPEventSubscriber constructor.
    *
+   * @param \Drupal\stanford_samlauth\Service\WorkgroupApiInterface $workgroupApi
+   *   Samlauth workgroup api service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory service.
    * @param \Drupal\Core\Session\AccountProxyInterface $userAccount

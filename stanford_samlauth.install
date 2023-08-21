@@ -2,8 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the Stanford SAML Authentication
- *   module.
+ * Migrate data from stanford_ssp module.
  */
 
 use Drupal\user\RoleInterface;

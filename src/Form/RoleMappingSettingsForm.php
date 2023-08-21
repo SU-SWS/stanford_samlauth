@@ -15,6 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class RoleMappingSettingsForm extends ConfigFormBase {
 
+  /**
+   * {@inheritDoc}
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
@@ -22,6 +25,9 @@ class RoleMappingSettingsForm extends ConfigFormBase {
     );
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public function __construct(ConfigFactoryInterface $config_factory, protected EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($config_factory);
   }
