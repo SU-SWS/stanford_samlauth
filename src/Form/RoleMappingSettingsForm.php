@@ -113,13 +113,6 @@ class RoleMappingSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $role_mapping = $form_state->get('mappings') ?? [];
     $added_mapping = $form_state->getValue(['role_mapping', 'add']);

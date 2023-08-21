@@ -3,6 +3,7 @@
 namespace Drupal\Tests\stanford_samlauth\Kernel\Drush\Commands;
 
 use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
+use Drupal\stanford_samlauth\Service\WorkgroupApiInterface;
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -14,13 +15,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class StanfordSspCommandsTest extends StanfordSamlAuthTestBase {
 
-
   /**
    * Drush command service.
    *
    * @var \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands
    */
   protected $commandObject;
+
+  /**
+   * Workgroup API flag if the sunet is valid.
+   *
+   * @var bool
+   */
+  protected $isValidSunet = TRUE;
 
   /**
    * {@inheritDoc}
@@ -34,6 +41,13 @@ class StanfordSspCommandsTest extends StanfordSamlAuthTestBase {
     $this->commandObject = new StanfordSamlAuthCommands($authmap, $form_builder, $config_factory);
     $this->commandObject->setLogger(\Drupal::logger('stanford_samlauth'));
     $this->commandObject->setOutput($this->createMock(OutputInterface::class));
+
+    $workgroup_api = $this->createMock(WorkgroupApiInterface::class);
+    $workgroup_api->method('connectionSuccessful')->willReturn(TRUE);
+    $workgroup_api->method('isSunetValid')
+      ->willReturnReference($this->isValidSunet);
+    \Drupal::getContainer()
+      ->set('stanford_samlauth.workgroup_api', $workgroup_api);
   }
 
   /**
@@ -54,7 +68,11 @@ class StanfordSspCommandsTest extends StanfordSamlAuthTestBase {
     $workgroup = $this->randomMachineName();
     $this->commandObject->entitlementRole($workgroup, 'role1');
 
-    $this->assertEquals(['role' => 'role1', 'attribute' => 'eduPersonEntitlement', 'value' => $workgroup], \Drupal::config('stanford_samlauth.settings')
+    $this->assertEquals([
+      'role' => 'role1',
+      'attribute' => 'eduPersonEntitlement',
+      'value' => $workgroup,
+    ], \Drupal::config('stanford_samlauth.settings')
       ->get('role_mapping.mapping.0'));
   }
 
@@ -87,6 +105,32 @@ class StanfordSspCommandsTest extends StanfordSamlAuthTestBase {
       ->loadByProperties(['name' => $sunet]);
     $this->assertNotEmpty($user);
     $this->assertNotFalse($authmap->getUid(strtolower($sunet), 'samlauth'));
+  }
+
+  public function testInvalidSunet() {
+    $sunet = 'foo bar';
+    $options = ['email' => '', 'roles' => ''];
+
+    $this->expectException('\Exception');
+    $this->commandObject->addUser($sunet, $options);
+  }
+
+  public function testInvalidWorkgroupApiSunet() {
+    $this->isValidSunet = FALSE;
+    $sunet = 'foobar';
+    $options = ['email' => '', 'roles' => ''];
+
+    $this->expectException('\Exception');
+    $this->commandObject->addUser($sunet, $options);
+  }
+
+  public function testUserExists() {
+    $sunet = 'foobar';
+    $options = ['email' => '', 'roles' => ''];
+    $this->commandObject->addUser($sunet, $options);
+
+    $this->expectException('\Exception');
+    $this->commandObject->addUser($sunet, $options);
   }
 
 }

@@ -24,7 +24,7 @@ stanford_samlauth.settings:
   path: '/admin/config/people/saml/authorization'
   defaults:
     _title: 'Authorization'
-    _form: 'Drupal\stanford_samlauth\Form\SamlAuthAuthorizations'
+    _form: 'Drupal\stanford_samlauth\Form\SamlAuthAuthorizationsForm'
   requirements:
     _permission: 'configure saml'
 

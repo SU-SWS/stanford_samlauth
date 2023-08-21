@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Configure Stanford SAML Authentication settings for this site.
  */
-class SamlAuthAuthorizations extends ConfigFormBase {
+class SamlAuthAuthorizationsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}

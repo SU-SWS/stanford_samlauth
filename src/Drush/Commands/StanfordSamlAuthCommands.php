@@ -142,6 +142,11 @@ class StanfordSamlAuthCommands extends DrushCommands {
     $form_state = new FormState();
     $form_state->setValues($options);
     $this->formBuilder->submitForm(SamlAuthCreateUserForm::class, $form_state);
+
+    if ($form_state::hasAnyErrors()) {
+      $errors = $form_state->getErrors();
+      throw new \Exception((string) reset($errors));
+    }
   }
 
 }
