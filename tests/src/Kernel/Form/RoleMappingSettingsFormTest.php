@@ -14,28 +14,11 @@ class RoleMappingSettingsFormTest extends StanfordSamlAuthTestBase {
     $form = $fb->buildForm(RoleMappingSettingsForm::class, $form_state);
     $this->assertNotEmpty($form);
 
-
     $form_state->set('mappings', [
-      [
-        'role' => 'role1',
-        'attribute' => 'foo',
-        'value' => 'bar',
-      ],
-      [
-        'role' => 'role1',
-        'attribute' => 'foo',
-        'value' => 'bar',
-      ],
-      [
-        'role' => 'role2',
-        'attribute' => '',
-        'value' => 'bar',
-      ],
-      [
-        'role' => 'role3',
-        'attribute' => 'foo',
-        'value' => '',
-      ],
+      ['role' => 'role1', 'attribute' => 'foo', 'value' => 'bar'],
+      ['role' => 'role1', 'attribute' => 'foo', 'value' => 'bar'],
+      ['role' => 'role2', 'attribute' => '', 'value' => 'bar'],
+      ['role' => 'role3', 'attribute' => 'foo', 'value' => ''],
     ]);
     $form_state->setValue(['role_mapping', 'add'], [
       'role' => 'role4',

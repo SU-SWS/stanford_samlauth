@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\stanford_samlauth\Unit\Plugin\Block;
 
+use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Routing\UrlGeneratorInterface;
@@ -36,10 +37,13 @@ class SamlLoginBlockTest extends UnitTestCase {
 
     $request_stack = new RequestStack();
 
+    $context_manager = $this->createMock(CacheContextsManager::class);
+
     $container = new ContainerBuilder();
     $container->set('string_translation', $this->getStringTranslationStub());
     $container->set('url_generator', $url_generator);
     $container->set('request_stack', $request_stack);
+    $container->set('cache_contexts_manager', $context_manager);
     \Drupal::setContainer($container);
 
     $this->block = SamlLoginBlock::create($container, [], 'saml_login', ['provider' => 'stanford_samlauth']);
@@ -67,7 +71,6 @@ class SamlLoginBlockTest extends UnitTestCase {
    */
   public function testAccess() {
     $this->assertContains('url.path', $this->block->getCacheContexts());
-
 
     $account = $this->createMock(AccountInterface::class);
     $account->method('isAnonymous')->willReturn(TRUE);
