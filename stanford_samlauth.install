@@ -38,7 +38,12 @@ function stanford_samlauth_install() {
   $role_ids = array_combine(array_keys($roles), array_keys($roles));
 
   // Set the SamlAuth settings.
-  $samlauth_config->set('unique_id_attribute', 'uid')
+  $samlauth_config
+    ->set('sp_entity_id', '')
+    ->set('unique_id_attribute', 'uid')
+    ->set('sp_x509_certificate', 'file:/path/to/file.crt')
+    ->set('sp_private_key', 'file:/path/to/file.key')
+    ->set('idp_certs', [])
     ->set('sp_name_id_format', 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient')
     ->set('idp_entity_id', 'https://idp.stanford.edu/')
     ->set('idp_single_sign_on_service', 'https://login.stanford.edu/idp/profile/SAML2/Redirect/SSO')
