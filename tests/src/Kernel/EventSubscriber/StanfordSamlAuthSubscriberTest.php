@@ -6,29 +6,35 @@ use Drupal\samlauth\Event\SamlauthEvents;
 use Drupal\samlauth\Event\SamlauthUserSyncEvent;
 use Drupal\samlauth\UserVisibleException;
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
 
-  /**
-   * {@inheritDoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-  }
+  use UserCreationTrait;
 
   public function testUserSyncEvent() {
-    $role_mapping = [[
-      'role' => 'role1',
-      'attribute' => 'fakeAttribute',
-      'value' => 'foobar',
-    ]];
-    \Drupal::configFactory()->getEditable('stanford_samlauth.settings')->set('role_mapping.mapping', $role_mapping)->save();
+    $role_mapping = [
+      [
+        'role' => 'role1',
+        'attribute' => 'fakeAttribute',
+        'value' => 'foobar',
+      ],
+    ];
+    \Drupal::configFactory()
+      ->getEditable('stanford_samlauth.settings')
+      ->set('role_mapping.mapping', $role_mapping)
+      ->save();
 
     $account = User::create(['name' => 'bob', 'mail' => 'bob@example.com']);
     $attributes = [
       'eduPersonAffiliation' => ['staff', 'member'],
-      'fakeAttribute' => 'foobar'
+      'fakeAttribute' => 'foobar',
     ];
 
     $event = new SamlauthUserSyncEvent($account, $attributes, FALSE);
@@ -145,6 +151,21 @@ class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
     $this->expectException(UserVisibleException::class);
     \Drupal::service('event_dispatcher')
       ->dispatch($event, SamlauthEvents::USER_SYNC);
+  }
+
+  public function testKernelRequest() {
+    $user = $this->createUser([]);
+    $user->addRole('administrator');
+    $user->save();
+    $this->setCurrentUser($user);
+
+    $kernel = $this->container->get('kernel');
+    $request = Request::create('/admin/people/create');
+    $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+    \Drupal::service('event_dispatcher')
+      ->dispatch($event, KernelEvents::REQUEST);
+
+    $this->assertInstanceOf(RedirectResponse::class, $event->getResponse());
   }
 
 }
