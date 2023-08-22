@@ -48,6 +48,8 @@ function stanford_samlauth_install() {
     ->set('idp_entity_id', 'https://idp.stanford.edu/')
     ->set('idp_single_sign_on_service', 'https://login.stanford.edu/idp/profile/SAML2/Redirect/SSO')
     ->set('map_users_roles', $role_ids)
+    ->set('map_users_name', TRUE)
+    ->set('map_users_mail', TRUE)
     ->set('create_users', TRUE)
     ->set('user_name_attribute', 'uid')
     ->set('user_mail_attribute', 'mail')
