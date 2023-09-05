@@ -16,6 +16,8 @@ Add the following to the settings.php file indicating the path to the cert files
 ```php
 $config['samlauth.authentication']['sp_x509_certificate'] = 'file:/path/to/cert.crt';
 $config['samlauth.authentication']['sp_private_key'] = 'file:/path/to/cert.key';
+
+// If using signing to authenticate the service.
 $config['samlauth.authentication']['idp_certs'][0] = 'file:/path/to/signing/cert.crt';
 
 // Optional Workgroup API cert and key.
