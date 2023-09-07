@@ -14,6 +14,8 @@ class StanfordSamlAuthLoginController extends ControllerBase {
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect response.
+   *
+   * @codeCoverageIgnore Nothing to test here.
    */
   public function login() {
     return $this->redirect('samlauth.saml_controller_login', [], ['query' => ['destination' => '/']]);
