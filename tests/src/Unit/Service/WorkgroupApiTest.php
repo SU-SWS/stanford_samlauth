@@ -43,7 +43,7 @@ class WorkgroupApiTest extends UnitTestCase {
   /**
    * {@inheritDoc}
    */
-  protected function setUp(): void {
+  public function setup(): void {
     parent::setUp();
 
     $this->authname = $this->randomMachineName();

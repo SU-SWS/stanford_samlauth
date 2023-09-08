@@ -25,7 +25,7 @@ class StanfordSamlAuthTestBase extends KernelTestBase {
   /**
    * {@inheritDoc}
    */
-  protected function setUp(): void {
+  public function setup(): void {
     parent::setup();
 
     $this->installEntitySchema('user');
