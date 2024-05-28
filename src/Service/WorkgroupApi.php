@@ -2,6 +2,7 @@
 
 namespace Drupal\stanford_samlauth\Service;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
@@ -16,20 +17,6 @@ use GuzzleHttp\Exception\GuzzleException;
 class WorkgroupApi implements WorkgroupApiInterface {
 
   const WORKGROUP_API = 'https://workgroupsvc.stanford.edu/workgroups/2.0';
-
-  /**
-   * Config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * Guzzle client service.
-   *
-   * @var \GuzzleHttp\ClientInterface
-   */
-  protected $guzzle;
 
   /**
    * Logger channel service.
@@ -55,16 +42,16 @@ class WorkgroupApi implements WorkgroupApiInterface {
   /**
    * StanfordSSPWorkgroupApi constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory service.
    * @param \GuzzleHttp\ClientInterface $guzzle
    *   Http client guzzle service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   Logger channel factory service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Caching service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ClientInterface $guzzle, LoggerChannelFactoryInterface $logger) {
-    $this->configFactory = $config_factory;
-    $this->guzzle = $guzzle;
+  public function __construct(protected ConfigFactoryInterface $configFactory, protected ClientInterface $guzzle, LoggerChannelFactoryInterface $logger, protected CacheBackendInterface $cache) {
     $this->logger = $logger->get('stanford_samlauth');
 
     $config = $this->configFactory->get('stanford_samlauth.settings');
@@ -159,6 +146,10 @@ class WorkgroupApi implements WorkgroupApiInterface {
    *   API response or false if fails.
    */
   protected function callApi(string $workgroup = NULL, string $sunet = NULL): ?array {
+    $cached_data = $this->cache->get("samlauth:$workgroup:$sunet");
+    if ($cached_data) {
+      return $cached_data->data;
+    }
     $config = $this->configFactory->get('stanford_samlauth.settings');
     $options = [
       'cert' => $this->getCert(),
@@ -173,7 +164,9 @@ class WorkgroupApi implements WorkgroupApiInterface {
     $api_url = Settings::get('stanford_samlauth.workgroup_api', self::WORKGROUP_API);
     try {
       $result = $this->guzzle->request('GET', $api_url, $options);
-      return json_decode($result->getBody(), TRUE);
+      $result = json_decode($result->getBody(), TRUE, 512, JSON_THROW_ON_ERROR);
+      $this->cache->set("samlauth:$workgroup:$sunet", $result, time() + ini_get('max_execution_time') ?: 60);
+      return $result;
     }
     catch (GuzzleException $e) {
       $this->logger->error('Unable to connect to workgroup api. @message', ['@message' => $e->getMessage()]);

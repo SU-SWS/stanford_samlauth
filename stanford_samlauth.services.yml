@@ -1,7 +1,7 @@
 services:
   stanford_samlauth.workgroup_api:
     class: Drupal\stanford_samlauth\Service\WorkgroupApi
-    arguments: [ '@config.factory', '@http_client', '@logger.factory' ]
+    arguments: [ '@config.factory', '@http_client', '@logger.factory', '@cache.default' ]
 
   stanford_samlauth.event_subscriber:
     class: Drupal\stanford_samlauth\EventSubscriber\StanfordSamlAuthSubscriber
