@@ -1,5 +1,5 @@
 {
-    "name": "fourkitchens/stanford_samlauth",
+    "name": "su-sws/stanford_samlauth",
     "type": "drupal-custom-module",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
