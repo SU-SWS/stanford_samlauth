@@ -40,6 +40,13 @@ class ValidSunetIDFieldValidationRule extends ConstraintFieldValidationRuleBase 
   /**
    * {@inheritdoc}
    */
+  public function getConfiguration() {
+    return $this->configuration + parent::getConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
 

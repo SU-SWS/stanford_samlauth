@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\stanford_samlauth\Kernel\Drush\Commands;
 
-use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
+use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthDrushCommands;
 use Drupal\stanford_samlauth\Service\WorkgroupApiInterface;
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +11,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class StanfordSspCommandsTest
  *
  * @package Drupal\Tests\stanford_samlauth\Kernel\Commands
- * @coversDefaultClass \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands
+ * @coversDefaultClass \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthDrushCommands
  */
-class StanfordSspCommandsTest extends StanfordSamlAuthTestBase {
+class StanfordSamlAuthDrushCommandsTest extends StanfordSamlAuthTestBase {
 
   /**
    * Drush command service.
    *
-   * @var \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands
+   * @var \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthDrushCommands
    */
   protected $commandObject;
 
@@ -40,7 +40,7 @@ class StanfordSspCommandsTest extends StanfordSamlAuthTestBase {
     $config_factory = \Drupal::configFactory();
     $entity_type_manager = \Drupal::entityTypeManager();
 
-    $this->commandObject = new StanfordSamlAuthCommands($authmap, $form_builder, $config_factory, $entity_type_manager);
+    $this->commandObject = new StanfordSamlAuthDrushCommands($authmap, $form_builder, $config_factory, $entity_type_manager);
     $this->commandObject->setLogger(\Drupal::logger('stanford_samlauth'));
     $this->commandObject->setOutput($this->createMock(OutputInterface::class));
 
