@@ -2,7 +2,8 @@
 
 namespace Drupal\Tests\stanford_samlauth\Kernel\Drush\Commands;
 
-use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthDrushCommands;
+use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
 use Drupal\stanford_samlauth\Service\WorkgroupApiInterface;
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +12,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class StanfordSspCommandsTest
  *
  * @package Drupal\Tests\stanford_samlauth\Kernel\Commands
- * @coversDefaultClass \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthDrushCommands
+ * @coversDefaultClass \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands
  */
-class StanfordSamlAuthDrushCommandsTest extends StanfordSamlAuthTestBase {
+class StanfordSamlAuthCommandsTest extends StanfordSamlAuthTestBase {
 
   /**
    * Drush command service.
    *
-   * @var \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthDrushCommands
+   * @var \Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands
    */
   protected $commandObject;
 
@@ -40,7 +41,13 @@ class StanfordSamlAuthDrushCommandsTest extends StanfordSamlAuthTestBase {
     $config_factory = \Drupal::configFactory();
     $entity_type_manager = \Drupal::entityTypeManager();
 
-    $this->commandObject = new StanfordSamlAuthDrushCommands($authmap, $form_builder, $config_factory, $entity_type_manager);
+    $container = new ContainerBuilder();
+    $container->set('externalauth.authmap', $authmap);
+    $container->set('form_builder', $form_builder);
+    $container->set('config.factory', $config_factory);
+    $container->set('entity_type.manager', $entity_type_manager);
+
+    $this->commandObject = StanfordSamlAuthCommands::create($container);
     $this->commandObject->setLogger(\Drupal::logger('stanford_samlauth'));
     $this->commandObject->setOutput($this->createMock(OutputInterface::class));
 

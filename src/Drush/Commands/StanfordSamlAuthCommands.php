@@ -11,17 +11,15 @@ use Drupal\externalauth\AuthmapInterface;
 use Drupal\stanford_samlauth\Form\SamlAuthCreateUserForm;
 use Drupal\user\RoleInterface;
 use Drush\Boot\DrupalBootLevels;
-use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Drush\Attributes as CLI;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Samlauth drush comamnds.
  */
 #[CLI\Bootstrap(DrupalBootLevels::FULL)]
-class StanfordSamlAuthDrushCommands extends DrushCommands {
-
-  use AutowireTrait;
+class StanfordSamlAuthCommands extends DrushCommands {
 
   /**
    * Config object of SAML settings.
@@ -31,11 +29,28 @@ class StanfordSamlAuthDrushCommands extends DrushCommands {
   protected $samlConfig;
 
   /**
-   * A config object with stanford_samlauth settings.
+   * A config object with stanford_ssp settings.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
   protected $stanfordConfig;
+
+  /**
+   * Instantiates a new instance of the implementing class using autowiring.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The service container this instance should use.
+   *
+   * @return static
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('externalauth.authmap'),
+      $container->get('form_builder'),
+      $container->get('config.factory'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * Drush command constructor.
