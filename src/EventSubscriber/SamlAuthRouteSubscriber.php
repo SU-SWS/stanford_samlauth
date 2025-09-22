@@ -25,8 +25,13 @@ final class SamlAuthRouteSubscriber extends RouteSubscriberBase {
    */
   protected function alterRoutes(RouteCollection $collection): void {
     $login_roles = $this->configFactory->get('samlauth.authentication')
-      ->get('drupal_login_roles');
-    if (array_filter($login_roles)) {
+      ->get('drupal_login_roles') ?: [];
+    $hide_local_login = $this->configFactory->get('stanford_samlauth.settings')
+      ->get('hide_local_login');
+
+    // If local login is allowed or there are some allowed roles to use local
+    // login, don't restrict access to the routes.
+    if (array_filter($login_roles) || !$hide_local_login) {
       return;
     }
     $routes_to_block = [
