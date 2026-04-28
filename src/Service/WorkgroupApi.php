@@ -205,7 +205,16 @@ class WorkgroupApi implements WorkgroupApiInterface {
       foreach ($user_data['members'] as $user_member) {
         $workgroup_names[] = $user_member['name'];
       }
+      $includeAdmins = $this->configFactory->get('stanford_samlauth.settings')
+        ->get('role_mapping.workgroup_api.include_admins');
+
+      if ($includeAdmins) {
+        foreach ($user_data['administrators'] as $user_member) {
+          $workgroup_names[] = $user_member['name'];
+        }
+      }
     }
+
     return $workgroup_names;
   }
 
