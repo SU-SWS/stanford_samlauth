@@ -6,10 +6,12 @@ namespace Drupal\Tests\stanford_samlauth\Kernel\Hook;
 
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Drupal\user\Form\UserLoginForm;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Samlauth Hooks.
  */
+#[RunTestsInSeparateProcesses]
 class StanfordSamlAuthHooksTest extends StanfordSamlAuthTestBase {
 
   public function testLocalTasks() {

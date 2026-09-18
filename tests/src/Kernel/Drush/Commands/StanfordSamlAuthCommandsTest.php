@@ -3,14 +3,16 @@
 namespace Drupal\Tests\stanford_samlauth\Kernel\Drush\Commands;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
 use Drupal\stanford_samlauth\Service\WorkgroupApiInterface;
-use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class StanfordSspCommandsTest
  */
+#[RunTestsInSeparateProcesses]
 class StanfordSamlAuthCommandsTest extends StanfordSamlAuthTestBase {
 
   /**

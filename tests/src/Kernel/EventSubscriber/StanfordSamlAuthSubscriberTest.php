@@ -2,18 +2,20 @@
 
 namespace Drupal\Tests\stanford_samlauth\Kernel\EventSubscriber;
 
+use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
+use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\samlauth\Event\SamlauthEvents;
 use Drupal\samlauth\Event\SamlauthUserSyncEvent;
 use Drupal\samlauth\UserVisibleException;
-use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\user\Entity\User;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+#[RunTestsInSeparateProcesses]
 class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
 
   use UserCreationTrait;

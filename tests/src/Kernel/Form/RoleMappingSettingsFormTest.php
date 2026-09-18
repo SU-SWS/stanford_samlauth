@@ -5,7 +5,9 @@ namespace Drupal\Tests\stanford_samlauth\Kernel\Form;
 use Drupal\Core\Form\FormState;
 use Drupal\stanford_samlauth\Form\RoleMappingSettingsForm;
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class RoleMappingSettingsFormTest extends StanfordSamlAuthTestBase {
 
   public function testForm() {

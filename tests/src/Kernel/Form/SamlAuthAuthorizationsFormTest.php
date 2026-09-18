@@ -5,7 +5,9 @@ namespace Drupal\Tests\stanford_samlauth\Kernel\Form;
 use Drupal\Core\Form\FormState;
 use Drupal\stanford_samlauth\Form\SamlAuthAuthorizationsForm;
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class SamlAuthAuthorizationsFormTest extends StanfordSamlAuthTestBase {
 
   public function testAuthForm(){
