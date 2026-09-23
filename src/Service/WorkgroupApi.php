@@ -165,7 +165,7 @@ class WorkgroupApi implements WorkgroupApiInterface {
    * @return null|array<WorkgroupAPIResponse>
    *   API response or false if fails.
    */
-  protected function callApi(string $workgroup = NULL, string $sunet = NULL): ?array {
+  protected function callApi(?string $workgroup = NULL, ?string $sunet = NULL): ?array {
     $type = $workgroup ? 'workgroup' : 'user';
     $id = $workgroup ?: $sunet;
     if (isset($this->responses[$type][$id])) {

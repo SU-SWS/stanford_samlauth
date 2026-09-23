@@ -4,11 +4,13 @@ namespace Drupal\Tests\stanford_samlauth\Kernel\EventSubscriber;
 
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Drupal\user\Entity\Role;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\TestWith;
 
 /**
  * Test route subscriber.
  */
+#[RunTestsInSeparateProcesses]
 class SamlAuthRouteSubscriberTest extends StanfordSamlAuthTestBase {
 
   /**

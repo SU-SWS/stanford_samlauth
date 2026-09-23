@@ -32,7 +32,6 @@ class StanfordSamlAuthTestBase extends KernelTestBase {
     $this->installEntitySchema('user_role');
     $this->installEntitySchema('path_alias');
     $this->installSchema('externalauth', 'authmap');
-    $this->installSchema('system', ['sequences']);
     $this->installConfig(['stanford_samlauth']);
 
     for ($i = 0; $i < 5; $i++) {
