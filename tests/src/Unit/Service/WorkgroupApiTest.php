@@ -10,12 +10,14 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Message\ResponseInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class WorkgroupApiTest.
  */
+#[Group('stanford_samlauth')]
 class WorkgroupApiTest extends UnitTestCase {
 
   /**
@@ -42,7 +44,7 @@ class WorkgroupApiTest extends UnitTestCase {
   /**
    * {@inheritDoc}
    */
-  public function setup(): void {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->authname = $this->randomMachineName();

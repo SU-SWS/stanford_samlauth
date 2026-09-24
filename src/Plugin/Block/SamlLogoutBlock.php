@@ -9,7 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\Translatablemarkup;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

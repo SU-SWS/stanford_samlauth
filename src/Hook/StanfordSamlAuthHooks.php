@@ -12,11 +12,14 @@ use Drupal\Core\Url;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Samlauth Hooks.
  */
 class StanfordSamlAuthHooks {
+
+  use StringTranslationTrait;
 
   /**
    * Hook constructor.
@@ -36,8 +39,8 @@ class StanfordSamlAuthHooks {
     $fields = [];
     if ($entity_type->id() == 'user') {
       $fields['affiliation'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('Affiliation'))
-        ->setDescription(t("User's affiliation as defined by SAML data."))
+        ->setLabel($this->t('Affiliation'))
+        ->setDescription($this->t("User's affiliation as defined by SAML data."))
         ->setStorageRequired(TRUE)
         ->setCardinality(-1);
     }
@@ -48,7 +51,7 @@ class StanfordSamlAuthHooks {
    * Modifies the local tasks for the user login and registration pages.
    */
   #[Hook('menu_local_tasks_alter')]
-  function menuLocalTasksAlter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
+  public function menuLocalTasksAlter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
     if ($route_name == 'user.login' || $route_name == 'user.register') {
       $config = $this->configFactory->get('stanford_samlauth.settings');
       if ($config->get('hide_local_login')) {
@@ -64,7 +67,7 @@ class StanfordSamlAuthHooks {
    * local login form.
    */
   #[Hook('form_user_login_form_alter')]
-  function userLoginFormAlter(&$form, FormStateInterface $form_state, $form_id) {
+  public function userLoginFormAlter(&$form, FormStateInterface $form_state, $form_id) {
     $link_text = $this->configFactory->get('samlauth.authentication')
       ->get('login_menu_item_title');
     $form['#attached']['library'][] = 'stanford_samlauth/samlauth';
@@ -72,7 +75,7 @@ class StanfordSamlAuthHooks {
       '#type' => 'html_tag',
       '#weight' => -99,
       '#tag' => 'a',
-      '#value' => $link_text ?: t('Stanford Login'),
+      '#value' => $link_text ?: $this->t('Stanford Login'),
       '#attributes' => [
         'rel' => 'nofollow',
         'href' => '/saml/login',
@@ -89,13 +92,13 @@ class StanfordSamlAuthHooks {
     $form['login_title'] = [
       '#type' => 'html_tag',
       '#tag' => 'h1',
-      '#value' => t('Login'),
+      '#value' => $this->t('Login'),
       '#weight' => -999,
     ];
     $form['intro_text'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
-      '#value' => t('Welcome back! Log in to access your website'),
+      '#value' => $this->t('Welcome back! Log in to access your website'),
       '#weight' => -998,
     ];
 
@@ -108,7 +111,7 @@ class StanfordSamlAuthHooks {
     // Moves the original form elements into a collapsed group.
     $form['manual'] = [
       '#type' => 'details',
-      '#title' => $config->get('local_login_fieldset_label') ?: t('Drupal Login'),
+      '#title' => $config->get('local_login_fieldset_label') ?: $this->t('Drupal Login'),
       '#open' => $config->get('local_login_fieldset_open') ?: FALSE,
     ];
     $form['manual']['name'] = $form['name'];
@@ -117,7 +120,7 @@ class StanfordSamlAuthHooks {
     $form['manual']['actions']['reset'] = [
       '#type' => 'link',
       '#url' => Url::fromRoute('user.pass'),
-      '#title' => t('Reset Password'),
+      '#title' => $this->t('Reset Password'),
     ];
     unset($form['name'], $form['pass'], $form['actions']);
   }

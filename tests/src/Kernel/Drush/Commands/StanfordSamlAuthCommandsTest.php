@@ -3,15 +3,17 @@
 namespace Drupal\Tests\stanford_samlauth\Kernel\Drush\Commands;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
 use Drupal\stanford_samlauth\Service\WorkgroupApiInterface;
+use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class StanfordSspCommandsTest
  */
+#[Group('stanford_samlauth')]
 #[RunTestsInSeparateProcesses]
 class StanfordSamlAuthCommandsTest extends StanfordSamlAuthTestBase {
 
@@ -32,8 +34,8 @@ class StanfordSamlAuthCommandsTest extends StanfordSamlAuthTestBase {
   /**
    * {@inheritDoc}
    */
-  public function setup(): void {
-    parent::setup();
+  protected function setUp(): void {
+    parent::setUp();
 
     $authmap = \Drupal::service('externalauth.authmap');
     $form_builder = \Drupal::formBuilder();

@@ -7,7 +7,10 @@ use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
 use Drupal\user\Entity\Role;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StanfordSamlAuthTestBase extends KernelTestBase {
+/**
+ * Base class for stanford_samlauth kernel tests.
+ */
+abstract class StanfordSamlAuthTestBase extends KernelTestBase {
 
   /**
    * {@inheritDoc}
@@ -25,8 +28,8 @@ class StanfordSamlAuthTestBase extends KernelTestBase {
   /**
    * {@inheritDoc}
    */
-  public function setup(): void {
-    parent::setup();
+  protected function setUp(): void {
+    parent::setUp();
 
     $this->installEntitySchema('user');
     $this->installEntitySchema('user_role');

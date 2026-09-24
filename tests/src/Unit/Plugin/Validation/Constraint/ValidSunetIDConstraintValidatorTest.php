@@ -7,11 +7,13 @@ use Drupal\stanford_samlauth\Plugin\Validation\Constraint\ValidSunetIDConstraint
 use Drupal\stanford_samlauth\Plugin\Validation\Constraint\ValidSunetIDConstraintValidator;
 use Drupal\stanford_samlauth\Service\WorkgroupApiInterface;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Validation test.
  */
+#[Group('stanford_samlauth')]
 class ValidSunetIDConstraintValidatorTest extends UnitTestCase {
 
   protected $plugin;
