@@ -4,20 +4,22 @@ namespace Drupal\Tests\stanford_samlauth\Kernel\EventSubscriber;
 
 use Drupal\Tests\stanford_samlauth\Kernel\StanfordSamlAuthTestBase;
 use Drupal\user\Entity\Role;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\TestWith;
 
 /**
  * Test route subscriber.
  */
+#[Group('stanford_samlauth')]
 #[RunTestsInSeparateProcesses]
 class SamlAuthRouteSubscriberTest extends StanfordSamlAuthTestBase {
 
   /**
    * {@inheritDoc}
    */
-  public function setup(): void {
-    parent::setup();
+  protected function setUp(): void {
+    parent::setUp();
     $this->installConfig('samlauth');
   }
 

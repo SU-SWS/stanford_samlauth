@@ -4,6 +4,7 @@ namespace Drupal\stanford_samlauth\Form;
 
 use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Password\PasswordGeneratorInterface;
@@ -25,14 +26,15 @@ class SamlAuthCreateUserForm extends FormBase {
     return new static(
       $container->get('externalauth.authmap'),
       $container->get('email.validator'),
-      $container->get('password_generator')
+      $container->get('password_generator'),
+      $container->get('entity_type.manager')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(protected AuthmapInterface $authmap, protected EmailValidatorInterface $emailValidator, protected PasswordGeneratorInterface $passwordGenerator) {}
+  public function __construct(protected AuthmapInterface $authmap, protected EmailValidatorInterface $emailValidator, protected PasswordGeneratorInterface $passwordGenerator, protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}
@@ -139,7 +141,7 @@ class SamlAuthCreateUserForm extends FormBase {
     $sunet = strtolower(trim(Html::escape(($form_state->getValue('sunetid')))));
     $form_state->setValue('sunetid', $sunet);
 
-    if ($this->authmap->getUid($sunet, 'simplesamlphp_auth')) {
+    if ($this->authmap->getUid($sunet, 'samlauth')) {
       $form_state->setError($form['sunetid'], $this->t('Could not create user. Authname %name already exists. Has the user already been created with a different username but the same SUNetID?', ['%name' => $sunet]));
       return;
     }
@@ -149,7 +151,8 @@ class SamlAuthCreateUserForm extends FormBase {
     $form_state->setValue('name', $name);
 
     // Check that there is no user with the same name.
-    if (user_load_by_name($name)) {
+    $user_storage = $this->entityTypeManager->getStorage('user');
+    if ($user_storage->loadByProperties(['name' => $name])) {
       $form_state->setError($form['name'], $this->t('Could not create user. Username %name already exists.', ['%name' => $name]));
     }
 
@@ -165,7 +168,7 @@ class SamlAuthCreateUserForm extends FormBase {
     // Check that there is no user with the same email
     // Drupal will let us create the user with a duplicate email, but
     // the user will run into issues when making changes to their profile.
-    if (user_load_by_mail($email)) {
+    if ($user_storage->loadByProperties(['mail' => $email])) {
       $form_state->setError($form['email'], $this->t('Could not create user. Email %email already in use.', ['%email' => $email]));
     }
   }

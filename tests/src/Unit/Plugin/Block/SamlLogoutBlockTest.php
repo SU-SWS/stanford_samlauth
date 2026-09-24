@@ -9,11 +9,13 @@ use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\stanford_samlauth\Plugin\Block\SamlLogoutBlock;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class SamlLogoutBlockTest
  */
+#[Group('stanford_samlauth')]
 class SamlLogoutBlockTest extends UnitTestCase {
 
   /**
@@ -26,7 +28,7 @@ class SamlLogoutBlockTest extends UnitTestCase {
   /**
    * {@inheritDoc}
    */
-  public function setup(): void {
+  protected function setUp(): void {
     parent::setUp();
 
     $url_generator = $this->createMock(UrlGeneratorInterface::class);

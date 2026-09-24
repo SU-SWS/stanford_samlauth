@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\stanford_samlauth\Unit\Plugin\Validation\Constraint;
+namespace Drupal\Tests\stanford_samlauth\Unit\Plugin\FieldValidationRule;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Form\FormState;
@@ -9,10 +9,12 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\stanford_samlauth\Plugin\FieldValidationRule\ValidSunetIDFieldValidationRule;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Field validation test.
  */
+#[Group('stanford_samlauth')]
 class ValidSunetIDFieldValidationRuleTest extends UnitTestCase {
 
   protected $validationRule;
