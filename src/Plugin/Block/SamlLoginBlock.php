@@ -29,14 +29,14 @@ class SamlLoginBlock extends BlockBase implements ContainerFactoryPluginInterfac
    *
    * @var \Drupal\Core\Routing\RedirectDestinationInterface
    */
-  private RedirectDestinationInterface $redirectDestination;
+  protected RedirectDestinationInterface $redirectDestination;
 
   /**
    * PathMatcher service.
    *
    * @var \Drupal\Core\Path\PathMatcherInterface
    */
-  private PathMatcherInterface $pathMatcher;
+  protected PathMatcherInterface $pathMatcher;
 
   /**
    * {@inheritDoc}
@@ -65,7 +65,7 @@ class SamlLoginBlock extends BlockBase implements ContainerFactoryPluginInterfac
    * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
    *   The path matcher service.
    */
-  public function __construct(array $configuration, string $plugin_id, array $plugin_definition, RedirectDestinationInterface $redirectDestination, PathMatcherInterface $pathMatcher) {
+  final public function __construct(array $configuration, string $plugin_id, array $plugin_definition, RedirectDestinationInterface $redirectDestination, PathMatcherInterface $pathMatcher) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->redirectDestination = $redirectDestination;
     $this->pathMatcher = $pathMatcher;

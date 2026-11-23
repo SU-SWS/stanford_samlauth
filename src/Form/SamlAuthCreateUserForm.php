@@ -34,7 +34,7 @@ class SamlAuthCreateUserForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(protected AuthmapInterface $authmap, protected EmailValidatorInterface $emailValidator, protected PasswordGeneratorInterface $passwordGenerator, protected EntityTypeManagerInterface $entityTypeManager) {}
+  final public function __construct(protected AuthmapInterface $authmap, protected EmailValidatorInterface $emailValidator, protected PasswordGeneratorInterface $passwordGenerator, protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}

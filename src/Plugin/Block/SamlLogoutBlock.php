@@ -54,7 +54,7 @@ class SamlLogoutBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   Current request stack object.
    */
-  public function __construct(array $configuration, string $plugin_id, array $plugin_definition, RequestStack $requestStack) {
+  final public function __construct(array $configuration, string $plugin_id, array $plugin_definition, RequestStack $requestStack) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUri = $requestStack->getCurrentRequest()?->getPathInfo();
   }

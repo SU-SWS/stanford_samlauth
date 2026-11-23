@@ -16,8 +16,16 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[Group('stanford_samlauth')]
 class ValidSunetIDConstraintValidatorTest extends UnitTestCase {
 
+  /**
+   * The SunetID constraint validator under test.
+   *
+   * @var \Drupal\stanford_samlauth\Plugin\Validation\Constraint\ValidSunetIDConstraintValidator
+   */
   protected $plugin;
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
 
@@ -33,6 +41,9 @@ class ValidSunetIDConstraintValidatorTest extends UnitTestCase {
     $this->plugin->initialize($context);
   }
 
+  /**
+   * Validating a SunetID returns no value.
+   */
   public function testValidation() {
     $constraint = new ValidSunetIDConstraint();
     $this->assertNull($this->plugin->validate('foobar', $constraint));

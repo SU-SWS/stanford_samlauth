@@ -64,7 +64,7 @@ class StanfordSamlAuthCommands extends DrushCommands {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager service.
    */
-  public function __construct(protected readonly AuthmapInterface $authMap, protected readonly FormBuilderInterface $formBuilder, ConfigFactoryInterface $config_factory, protected readonly EntityTypeManagerInterface $entityTypeManager) {
+  final public function __construct(protected readonly AuthmapInterface $authMap, protected readonly FormBuilderInterface $formBuilder, ConfigFactoryInterface $config_factory, protected readonly EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct();
     $this->samlConfig = $config_factory->getEditable('samlauth.authentication');
     $this->stanfordConfig = $config_factory->getEditable('stanford_samlauth.settings');
@@ -115,12 +115,14 @@ class StanfordSamlAuthCommands extends DrushCommands {
   #[CLI\Option(name: 'email', description: 'The user\'s email.')]
   #[CLI\Option(name: 'roles', description: 'Comma separated list of role names.')]
   #[CLI\Option(name: 'send-email', description: 'Send email to the user?')]
-  public function addUser(string $sunetid, array $options = [
-    'name' => NULL,
-    'email' => NULL,
-    'roles' => NULL,
-    'send-email' => NULL,
-  ]
+  public function addUser(
+    string $sunetid,
+    array $options = [
+      'name' => NULL,
+      'email' => NULL,
+      'roles' => NULL,
+      'send-email' => NULL,
+    ],
   ) {
     foreach ($options as &$value) {
       if (is_string($value)) {

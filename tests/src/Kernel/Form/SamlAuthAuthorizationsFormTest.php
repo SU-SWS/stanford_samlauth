@@ -15,13 +15,16 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 #[RunTestsInSeparateProcesses]
 class SamlAuthAuthorizationsFormTest extends StanfordSamlAuthTestBase {
 
-  public function testAuthForm(){
+  /**
+   * Tests building and submitting the login authorizations form.
+   */
+  public function testAuthForm() {
     $fb = \Drupal::formBuilder();
     $form_state = new FormState();
     $form = $fb->buildForm(SamlAuthAuthorizationsForm::class, $form_state);
     $this->assertNotEmpty($form['restrict']);
 
-    $form_state->setValues(['restrict' => true, 'users' => 'foo, bar baz', 'groups' => '']);
+    $form_state->setValues(['restrict' => TRUE, 'users' => 'foo, bar baz', 'groups' => '']);
     $fb->submitForm(SamlAuthAuthorizationsForm::class, $form_state);
 
     $config = \Drupal::config('stanford_samlauth.settings')->getRawData();

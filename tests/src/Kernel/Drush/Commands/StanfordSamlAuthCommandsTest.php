@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class StanfordSspCommandsTest
+ * Class StanfordSspCommandsTest.
  */
 #[Group('stanford_samlauth')]
 #[RunTestsInSeparateProcesses]
@@ -117,6 +117,9 @@ class StanfordSamlAuthCommandsTest extends StanfordSamlAuthTestBase {
     $this->assertNotFalse($authmap->getUid(strtolower($sunet), 'samlauth'));
   }
 
+  /**
+   * An invalid SunetID format throws an exception.
+   */
   public function testInvalidSunet() {
     $sunet = 'foo bar';
     $options = ['email' => '', 'roles' => ''];
@@ -125,6 +128,9 @@ class StanfordSamlAuthCommandsTest extends StanfordSamlAuthTestBase {
     $this->commandObject->addUser($sunet, $options);
   }
 
+  /**
+   * A SunetID rejected by the workgroup API throws an exception.
+   */
   public function testInvalidWorkgroupApiSunet() {
     $this->isValidSunet = FALSE;
     $sunet = 'foobar';
@@ -134,6 +140,9 @@ class StanfordSamlAuthCommandsTest extends StanfordSamlAuthTestBase {
     $this->commandObject->addUser($sunet, $options);
   }
 
+  /**
+   * Adding a user that already exists throws an exception.
+   */
   public function testUserExists() {
     $sunet = 'foobar';
     $options = ['email' => '', 'roles' => ''];

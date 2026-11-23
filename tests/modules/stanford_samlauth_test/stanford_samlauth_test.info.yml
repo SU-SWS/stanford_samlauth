@@ -1,4 +1,5 @@
 name: 'Test Stanford SSP'
+description: 'Test helpers for Stanford SAML Auth kernel tests.'
 type: module
 core_version_requirement: ^11.1 || ^12
 hidden: true

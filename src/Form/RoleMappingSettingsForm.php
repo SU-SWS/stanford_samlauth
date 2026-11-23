@@ -30,7 +30,7 @@ class RoleMappingSettingsForm extends ConfigFormBase {
   /**
    * {@inheritDoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, protected EntityTypeManagerInterface $entityTypeManager, TypedConfigManagerInterface $typedConfigManager) {
+  final public function __construct(ConfigFactoryInterface $config_factory, protected EntityTypeManagerInterface $entityTypeManager, TypedConfigManagerInterface $typedConfigManager) {
     parent::__construct($config_factory, $typedConfigManager);
   }
 
