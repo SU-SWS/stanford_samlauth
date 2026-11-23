@@ -23,6 +23,9 @@ class SamlAuthRouteSubscriberTest extends StanfordSamlAuthTestBase {
     $this->installConfig('samlauth');
   }
 
+  /**
+   * Password reset access depends on local login and role mapping settings.
+   */
   #[TestWith(['hide_local_login' => TRUE, 'role_mapping' => TRUE])]
   #[TestWith(['hide_local_login' => FALSE, 'role_mapping' => TRUE])]
   #[TestWith(['hide_local_login' => TRUE, 'role_mapping' => FALSE])]

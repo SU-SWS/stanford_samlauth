@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class SamlLogoutBlockTest
+ * Tests the SAML logout block build and access.
  */
 #[Group('stanford_samlauth')]
 class SamlLogoutBlockTest extends UnitTestCase {

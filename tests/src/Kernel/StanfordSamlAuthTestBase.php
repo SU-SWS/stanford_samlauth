@@ -3,9 +3,7 @@
 namespace Drupal\Tests\stanford_samlauth\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\stanford_samlauth\Drush\Commands\StanfordSamlAuthCommands;
 use Drupal\user\Entity\Role;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Base class for stanford_samlauth kernel tests.

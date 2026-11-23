@@ -6,10 +6,16 @@
  */
 
 if (!function_exists('dt') && isset($_ENV['SIMPLETEST_DB'])) {
+
   /**
    * Simulates drush translate.
+   *
+   * Drush is not loaded in kernel tests, so this stands in for its dt().
    */
+  // phpcs:ignore Drupal.NamingConventions.ValidFunctionName.InvalidPrefix
   function dt($string, $args = []) {
+    // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
     return t($string, $args);
   }
+
 }

@@ -63,8 +63,9 @@ class StanfordSamlAuthHooks {
   }
 
   /**
-   * Alters the user login form to add a SAML login link and modify the
-   * local login form.
+   * Adds a SAML login link to the user login form.
+   *
+   * Also adjusts the local login form based on module settings.
    */
   #[Hook('form_user_login_form_alter')]
   public function userLoginFormAlter(&$form, FormStateInterface $form_state, $form_id) {

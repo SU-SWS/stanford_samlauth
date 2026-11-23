@@ -26,6 +26,9 @@ class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
 
   use UserCreationTrait;
 
+  /**
+   * User sync sets the affiliation field and maps roles from attributes.
+   */
   public function testUserSyncEvent() {
     $role_mapping = [
       [
@@ -54,6 +57,9 @@ class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
     $this->assertContains('role1', $account->getRoles());
   }
 
+  /**
+   * Users not in the allowed SunetID list are denied login.
+   */
   public function testInvalidSunet() {
     $restrictions = [
       'restrict' => TRUE,
@@ -93,6 +99,9 @@ class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
       ->dispatch($event, SamlauthEvents::USER_SYNC);
   }
 
+  /**
+   * Users without an allowed affiliation are denied login.
+   */
   public function testInvalidAffiliation() {
     $restrictions = [
       'restrict' => TRUE,
@@ -135,6 +144,9 @@ class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
       ->dispatch($event, SamlauthEvents::USER_SYNC);
   }
 
+  /**
+   * Users not in an allowed workgroup are denied login.
+   */
   public function testInvalidGroup() {
     $restrictions = [
       'restrict' => TRUE,
@@ -172,6 +184,9 @@ class StanfordSamlAuthSubscriberTest extends StanfordSamlAuthTestBase {
       ->dispatch($event, SamlauthEvents::USER_SYNC);
   }
 
+  /**
+   * The user create page redirects to the SAML user create form.
+   */
   public function testKernelRequest() {
     $user = $this->createUser([]);
     $user->addRole('administrator');

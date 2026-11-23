@@ -17,6 +17,11 @@ use Drupal\Core\Validation\Attribute\Constraint;
 )]
 final class ValidSunetIDConstraint extends SymfonyConstraint {
 
+  /**
+   * The message shown when the value is not a valid SunetID.
+   *
+   * @var string
+   */
   public string $message = '@sunetid is not a valid SunetID.';
 
 }

@@ -3,7 +3,7 @@
 namespace Drupal\stanford_samlauth\Service;
 
 /**
- * Interface StanfordSSPWorkgroupApiInterface.
+ * Queries the Stanford Workgroup API for workgroups and SunetIDs.
  *
  * @package Drupal\stanford_samlauth\Service
  */

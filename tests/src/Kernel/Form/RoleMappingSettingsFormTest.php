@@ -15,6 +15,9 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 #[RunTestsInSeparateProcesses]
 class RoleMappingSettingsFormTest extends StanfordSamlAuthTestBase {
 
+  /**
+   * Tests building and submitting the role mapping settings form.
+   */
   public function testForm() {
     $fb = \Drupal::formBuilder();
     $form_state = new FormState();

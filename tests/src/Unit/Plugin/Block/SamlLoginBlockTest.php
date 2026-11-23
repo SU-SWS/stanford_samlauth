@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class SamlLoginBlockTest
+ * Tests the SAML login block build, access and configuration.
  */
 #[Group('stanford_samlauth')]
 class SamlLoginBlockTest extends UnitTestCase {
@@ -123,7 +123,7 @@ class SamlLoginBlockTest extends UnitTestCase {
     $build = $this->block->build();
     $this->assertCount(1, $build);
     $this->assertArrayHasKey('login', $build);
-    $this->assertEquals( 'html_tag', $build['login']['#type']);
+    $this->assertEquals('html_tag', $build['login']['#type']);
     $this->assertEquals('/foo-bar', $build['login']['#attributes']['href']);
   }
 

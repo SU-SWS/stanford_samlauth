@@ -8,14 +8,13 @@ use Drupal\stanford_samlauth\Service\WorkgroupApi;
 use Drupal\Tests\UnitTestCase;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\Attributes\Group;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class WorkgroupApiTest.
+ * Tests the workgroup API service with a mocked HTTP client.
  */
 #[Group('stanford_samlauth')]
 class WorkgroupApiTest extends UnitTestCase {
@@ -72,6 +71,9 @@ class WorkgroupApiTest extends UnitTestCase {
     $this->service = new WorkgroupApi($config_factory, $guzzle, $logger);
   }
 
+  /**
+   * Returns a mocked workgroup API response for the requested ID.
+   */
   public function guzzleRequestCallback($method, $url, $options) {
     $request = $this->createMock(RequestInterface::class);
     $guzzle_response = $this->createMock(ResponseInterface::class);
@@ -107,6 +109,9 @@ class WorkgroupApiTest extends UnitTestCase {
     return $guzzle_response;
   }
 
+  /**
+   * The certificate and key paths can be set and read back.
+   */
   public function testSetCert() {
     $new_path = $this->randomMachineName();
     $this->service->setCert($new_path);
@@ -117,10 +122,16 @@ class WorkgroupApiTest extends UnitTestCase {
     $this->assertEquals($new_path, $this->service->getKey());
   }
 
+  /**
+   * The API connection check succeeds.
+   */
   public function testConnection() {
     $this->assertTrue($this->service->connectionSuccessful());
   }
 
+  /**
+   * Tests checking a user against any and all of a set of workgroups.
+   */
   public function testUserGroups() {
     $this->assertFalse($this->service->userInAnyGroup(['invalid:workgroup'], $this->authname));
     $this->assertTrue($this->service->userInAnyGroup(['valid:workgroup'], $this->authname));
@@ -149,6 +160,9 @@ class WorkgroupApiTest extends UnitTestCase {
     $this->assertFalse($this->service->userInGroup('foo', 'bar'));
   }
 
+  /**
+   * Tests SunetID validation against the workgroup API.
+   */
   public function testValidSunet() {
     $this->assertFalse($this->service->isSunetValid('bar'));
     $this->assertTrue($this->service->isSunetValid($this->authname));

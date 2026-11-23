@@ -17,8 +17,16 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('stanford_samlauth')]
 class ValidSunetIDFieldValidationRuleTest extends UnitTestCase {
 
+  /**
+   * The SunetID field validation rule under test.
+   *
+   * @var \Drupal\stanford_samlauth\Plugin\FieldValidationRule\ValidSunetIDFieldValidationRule
+   */
   protected $validationRule;
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
 
@@ -36,6 +44,9 @@ class ValidSunetIDFieldValidationRuleTest extends UnitTestCase {
     $this->validationRule = ValidSunetIDFieldValidationRule::create($container, [], 'foo', []);
   }
 
+  /**
+   * Tests the validation rule constraint and configuration form.
+   */
   public function testFieldValidation() {
     $this->assertEquals('ValidSunetID', $this->validationRule->getConstraintName());
     $this->assertTrue($this->validationRule->isPropertyConstraint());
